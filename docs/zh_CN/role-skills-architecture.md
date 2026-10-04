@@ -3,7 +3,7 @@
 > 回答一个问题：**一条能力该写成 Skill、写进 Agent Instructions，还是写进 Squad？**
 > 以及：为什么平台 URL、凭据、REST 细节**永远不出现在角色提示词里**。
 
-本文是 [artifact-conventions](./artifact-conventions.md) 中「三层架构」的完整论证，也是 `templates/zh_CN/skills/README.md` 索引的设计依据。
+本文是 [artifact-conventions](./artifact-conventions.md) 中「三层架构」的完整论证，也是 `templates/skills/README.md` 索引的设计依据。
 
 ---
 
@@ -42,8 +42,8 @@
 └────────────────────────┬──────────────────────────────────┘
                          │ 按 skill 名调用
 ┌─ 平台层  platform ──────┴── 唯一连外部系统的一层 ──────────┐
-│  multica-platform-confluence / -jira / -jenkins            │
-│  multica-platform-apifox / -figma                          │
+│  wiki-platform / -jira / -jenkins            │
+│   / -figma                          │
 │  只在这里出现 URL、凭据、REST 细节                          │
 └────────────────────────────────────────────────────────────┘
 
@@ -96,12 +96,12 @@
 
 | Skill | 读 | 写 |
 | --- | --- | --- |
-| `multica-platform-jira` | issue、关联 issue、Confluence 链接 | 建 Story、流转、追加描述 / 链接 |
-| `multica-platform-confluence` | 页面（URL / pageId → Markdown + 图片） | 创建 / 更新页面（Markdown / HTML） |
-| `multica-platform-figma` | 文件元数据、设计摘要 | — |
-| `multica-platform-apifox` | 场景 / 契约 | OpenAPI 同步、场景补充、跑批 |
+| `issue-tracker-platform | issue、关联 issue、Confluence 链接 | 建 Story、流转、追加描述 / 链接 |
+| `wiki-platform | 页面（URL / pageId → Markdown + 图片） | 创建 / 更新页面（Markdown / HTML） |
+| `` | 文件元数据、设计摘要 | — |
+| `` | 场景 / 契约 | OpenAPI 同步、场景补充、跑批 |
 | `multica-platform-jenkins` | 构建状态、日志 | 触发构建 / 发布 / 晋级 |
-| `multica-platform-knowledge-base` | 知识库问答 | — |
+| `knowledge-base-platform | 知识库问答 | — |
 
 > 平台层**只放占位外壳**：`config.yaml` 与 `.env.example` 里全是 `<JIRA_URL>`、`<JENKINS_URL>` 这类占位符，团队填自己的值即可。详见 [platform-collaboration](./platform-collaboration.md)。
 
@@ -115,12 +115,6 @@
 | `multica-review-frontend` | FrontendReviewer | 边界态、影响面、8 个维度 |
 | `multica-review-backend` | BackendReviewer | 契约、错误处理、兼容性 |
 | `multica-review-test` | TestReviewer | 用例可执行性与覆盖真实性 |
-
-### 工具
-
-| Skill | 用途 |
-| --- | --- |
-| `multica-manage-skills` | 通过 Multica API 做运营统计 |
 
 ---
 
@@ -156,7 +150,7 @@
 | Bad | Better |
 | --- | --- |
 | 在 Agent Instructions 里写「把设计文档发到 `<空间名>` 的 `<页面>` 下」 | 写「用 `multica-artifact-architect` 落地并回传链接」，父页配置留在平台 skill |
-| 角色 skill 里自带一份 JIRA Basic 认证代码 | 删掉，改声明 `metadata.orchestrates: multica-platform-jira` |
+| 角色 skill 里自带一份 JIRA Basic 认证代码 | 删掉，改声明 `metadata.orchestrates: issue-tracker-platform |
 | 让完成者自己评审自己的产物 | 评审由 `multica-review-*` + 非产出者执行，见 [gates-and-evidence](./gates-and-evidence.md) |
 | 一个 skill 又写「用例该怎么写」又写「怎么连 JIRA 导入」 | 拆开：内容留 T1，连接留 platform；绑定具体测试工具的导入脚本留在团队自己的 T1 里 |
 

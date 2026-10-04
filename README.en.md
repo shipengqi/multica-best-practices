@@ -43,25 +43,32 @@ You create: Agents (roles) + Squad (orchestration) + Skills (practices) + Issue 
 
    | Starter | Use | Status |
    | --- | --- | --- |
-   | [Software Development (Reviewed)](./templates/en_US/squad/software-development-reviewed/README.md) | Recommended main flow: dedicated Reviewer per regular role and a two-layer gate (generic gate + professional artifact review) | Recommended |
-   | [Software Development](./templates/en_US/squad/software-development/README.md) | Lightweight alternative: frontend/backend routed by scope; any role can be missing, single-layer generic gate (no professional review) | Optional |
-   | [Bug Fix](./templates/en_US/squad/bug-fix/README.md) | Root cause / fix / regression (routed by impact, skips Architect) | Experimental |
+   | [Software Development (Reviewed)](./templates/squad/software-development-reviewed/README.md) | Recommended main flow: dedicated Reviewer per regular role and a two-layer gate (generic gate + professional artifact review) | Recommended |
+   | [Software Development](./templates/squad/software-development/README.md) | Lightweight alternative: frontend/backend routed by scope; any role can be missing, single-layer generic gate (no professional review) | Optional |
+   | [Bug Fix](./templates/squad/bug-fix/README.md) | Root cause / fix / regression (routed by impact, skips Architect) | Experimental |
 
    More starters (Technical Research, etc.) will be added after being validated on real tasks. **Don't pretend best practices are finished.**
+
+   ## New-project quick check
+
+   | Question | Answer |
+   | --- | --- |
+   | **We don't use JIRA / Confluence — can we still use these templates?** | Yes. The `squad.md` + agent instructions are the core; they have no platform dependency. Content-layer skills (`multica-backend-impl`, `multica-technical-design`, etc.) work without any platform skill — the Leader provides links in dispatch, agents read them directly. Platform skills are optional automation enhancers: mount them when you want the agent to fetch/publish automatically; leave them unmounted when you don't. |
+   | **What is the minimum to get started?** | 1 Leader (squad.md injected) + 1 implementing role (e.g. @BackendDev). No skills required at all — agent instructions already embed the full behavior. Add skills one at a time as the need arises. |
+   | **Is the T1/T2/T3 test structure mandatory?** | No. It is a methodology for teams with a dedicated Tester. If you have no Tester or no automated testing, skip it entirely — nothing in the core flow depends on it. |
+   | **Do I need all 24 skills?** | No. Skills mount per-agent on demand. Start with the minimum skill table in Step 2. Mount additional skills only when that agent's need for that capability arises. |
 
    ## Repository structure
 
    ```text
    AGENTS.md     ⭐ Agent entry: project conventions & change rules
    templates/  ⭐ Start here: all copy-ready config
-   ├── zh_CN/              Chinese templates (default; copy the whole subdir)
-   │   ├── agents/           Shared Agent Instructions (15 role defs: 9 regular + 6 dedicated Reviewers)
-   │   ├── skills/           Shared Skills (29, grouped by role: architect / backend / designer / devops / frontend / leader / platform / product-manager / reviewer / shared / tester; see skills/README.md for the four-layer model)
-   │   └── squad/            Squad starters
-   │       ├── software-development/  Regular development (squad / issue / README incl. workflow)
-   │       ├── software-development-reviewed/  Recommended main flow: dedicated Reviewer per role + two-layer gate
-   │       └── bug-fix/              Minimal fix combination (only the orchestration changes)
-   └── en_US/              English templates (mirrors zh_CN/)
+   ├── agents/           Shared Agent Instructions (15 role defs: 9 regular + 6 dedicated Reviewers)
+   ├── skills/           Shared Skills (24, grouped by role: architect / backend / designer / devops / frontend / leader / platform / product-manager / reviewer / tester; see skills/README.md for the four-layer model)
+   └── squad/            Squad starters
+       ├── software-development/  Regular development (squad / issue / README incl. workflow)
+       ├── software-development-reviewed/  Recommended main flow: dedicated Reviewer per role + two-layer gate
+       └── bug-fix/              Minimal fix combination (only the orchestration changes)
    docs/          ⭐ Read this first: where instructions go / gates & evidence / common mistakes / adapt & scale
    ├── zh_CN/              Chinese methodology
    └── en_US/              English methodology
@@ -71,7 +78,7 @@ You create: Agents (roles) + Squad (orchestration) + Skills (practices) + Issue 
 
    ## Full flow at a glance
 
-The complete chain from a requirement coming in as an Issue to tests passing (based on `templates/en_US/squad/software-development-reviewed`, the two-layer-gate main flow; `software-development` is the lightweight alternative without professional review):
+The complete chain from a requirement coming in as an Issue to tests passing (based on `templates/squad/software-development-reviewed`, the two-layer-gate main flow; `software-development` is the lightweight alternative without professional review):
 
 ```mermaid
 flowchart TB
@@ -231,25 +238,45 @@ Steps 4–6 (create Issue → assign → run) are **shared** by both modes.
 **import skills → create/update agents → create squad → add members → bind skills**.
 It is idempotent (re-runnable), joins everything **by name** (no UUIDs to fill in), and needs only the Python 3.9+ standard library.
 
+**macOS / Linux (Bash/Zsh):**
+
+```bash
+cd scripts/multica-sync
+
+export MULTICA_API_TOKEN="mul_xxx"                           # your API token
+export MULTICA_API_URL="https://your-multica.example.com"   # your Multica URL
+
+python multica.py init --workspace 100 --dry-run   # preview first (optional)
+python multica.py init --workspace 100             # one command builds everything
+```
+
+**Windows (PowerShell):**
+
 ```powershell
 cd scripts/multica-sync
 
 $env:MULTICA_API_TOKEN = "mul_xxx"                           # your API token
 $env:MULTICA_API_URL   = "https://your-multica.example.com"  # your Multica URL
 
-python bootstrap_squad.py --workspace 100 --dry-run   # preview first (optional)
-python bootstrap_squad.py --workspace 100             # one command builds everything
+python multica.py init --workspace 100 --dry-run   # preview first (optional)
+python multica.py init --workspace 100             # one command builds everything
 ```
 
 That's it — it uses the bundled `squad-bootstrap.example.json` (15 roles with their skills) by default.
 To customise roles or mounts, copy it first:
 
-```powershell
+```bash
+# Bash/Zsh
 cp squad-bootstrap.example.json squad-bootstrap.json
-python bootstrap_squad.py --workspace 100 --config squad-bootstrap.json
+python multica.py init --workspace 100 --config squad-bootstrap.json
 ```
 
-> Reading English templates? Add `$env:MULTICA_TEMPLATE_LANG = "en_US"` (default is `zh_CN`, which is the most complete tree).
+```powershell
+# PowerShell
+cp squad-bootstrap.example.json squad-bootstrap.json
+python multica.py init --workspace 100 --config squad-bootstrap.json
+```
+
 > Mode A already covers Steps 1–3; jump straight to **Step 4 — Create the Issue**.
 > For partial syncs, exact binding replacement or a specific runtime, see [`scripts/multica-sync/README.md`](./scripts/multica-sync/README.md).
 
@@ -257,19 +284,23 @@ python bootstrap_squad.py --workspace 100 --config squad-bootstrap.json
 
 ### Mode B — Manual (copy-paste)
 
-👉 **[`templates/en_US/squad/software-development-reviewed/README.md`](./templates/en_US/squad/software-development-reviewed/README.md)** (lightweight no-professional-review variant: [`software-development`](./templates/en_US/squad/software-development/README.md))
+👉 **[`templates/squad/software-development-reviewed/README.md`](./templates/squad/software-development-reviewed/README.md)** (lightweight no-professional-review variant: [`software-development`](./templates/squad/software-development/README.md))
 
 You get:
 
 - 1 Squad Leader (orchestration + gatekeeping)
 - 15 Agents: the main-flow `software-development-reviewed` includes 6 dedicated `*-reviewer` agents (ArchReviewer / DesignReviewer / ProductReviewer / FrontendReviewer / BackendReviewer / TestReviewer); the lightweight `software-development` is 9 Agents (single `Reviewer`)
-- 29 Skills (copy as needed; `multica-verification` is the mandatory gatekeeping Skill, minimum set in the table below)
+- 24 Skills (copy as needed; `multica-verification` is the mandatory gatekeeping Skill, minimum set in the table below)
 - 1 Issue template (with the "affected ends" scope declaration; source supports "linked / fully self-contained" — pick one)
 - 1 squad workflow (the `software-development-reviewed` reviewed flow with per-role dedicated reviewers; `software-development` is the lightweight variant where any role can be missing, incl. G2.5 CI/CD)
 
 #### Step 1 — Create Agents
 
-In Multica, create 9 Agents (naming follows [`docs/en_US/naming-conventions.md`](./docs/en_US/naming-conventions.md)) and copy the code block from the matching file under [`templates/en_US/agents/`](./templates/en_US/agents/) into each Agent's Instructions:
+In Multica, create Agents. Naming follows [`docs/en_US/naming-conventions.md`](./docs/en_US/naming-conventions.md). Copy the code block from the matching file under [`templates/agents/`](./templates/agents/) into each Agent's Instructions.
+
+The recommended main-flow configuration (`software-development-reviewed`) includes 15 Agents:
+
+**Core 9 roles (in all Starters):**
 
 | Agent | Copy |
 | --- | --- |
@@ -283,7 +314,18 @@ In Multica, create 9 Agents (naming follows [`docs/en_US/naming-conventions.md`]
 | Reviewer | `reviewer.md` |
 | DevOps | `devops.md` |
 
-> `leader.md` does not need a separate Agent: Squad Instructions only inject the Leader, and `squad.md` is its behavior config. ProductManager is optional — dispatched by the Leader only when the requirement has no ready-scope marker.
+**Dedicated Reviewers × 6 (main-flow `software-development-reviewed` only; optional for lightweight `software-development`):**
+
+| Agent | Copy |
+| --- | --- |
+| ProductReviewer | `product-reviewer.md` |
+| ArchReviewer | `arch-reviewer.md` |
+| DesignReviewer | `design-reviewer.md` |
+| FrontendReviewer | `frontend-reviewer.md` |
+| BackendReviewer | `backend-reviewer.md` |
+| TestReviewer | `test-reviewer.md` |
+
+> The lightweight `software-development` starter requires only the core 9. `leader.md` does not need a separate Agent: Squad Instructions only inject the Leader, and `squad.md` is its behavior config. ProductManager is optional — dispatched by the Leader only when the requirement has no ready-scope marker.
 
 #### Step 2 — Create Skills
 
@@ -291,27 +333,26 @@ In Multica, create the Skills below, copying the code block from the matching `S
 
 | Skill | Source | Mount to |
 | --- | --- | --- |
-| `multica-verification` (gatekeeping, required) | [`templates/en_US/skills/leader/multica-verification/SKILL.md`](./templates/en_US/skills/leader/multica-verification/SKILL.md) | **Leader** |
-| `multica-pm-requirement-spec` | [`templates/en_US/skills/product-manager/multica-pm-requirement-spec/SKILL.md`](./templates/en_US/skills/product-manager/multica-pm-requirement-spec/SKILL.md) | Leader / Architect |
-| `multica-technical-design` | [`templates/en_US/skills/architect/multica-technical-design/SKILL.md`](./templates/en_US/skills/architect/multica-technical-design/SKILL.md) | Architect |
-| `multica-pm-artifact-publish` | [`templates/en_US/skills/product-manager/multica-pm-artifact-publish/SKILL.md`](./templates/en_US/skills/product-manager/multica-pm-artifact-publish/SKILL.md) | ProductManager (lands artifacts to the requirement platform) |
-| `multica-design-ui-impl` | [`templates/en_US/skills/designer/multica-design-ui-impl/SKILL.md`](./templates/en_US/skills/designer/multica-design-ui-impl/SKILL.md) | Designer (lands artifacts to the design platform) |
-| `multica-artifact-architect` | [`templates/en_US/skills/architect/multica-artifact-architect/SKILL.md`](./templates/en_US/skills/architect/multica-artifact-architect/SKILL.md) | Architect (lands artifacts to Git / knowledge platform) |
-| `multica-artifact-backend` | [`templates/en_US/skills/backend/multica-artifact-backend/SKILL.md`](./templates/en_US/skills/backend/multica-artifact-backend/SKILL.md) | BackendDev (lands artifacts to the API platform) |
-| `multica-artifact-cicd-sync` | [`templates/en_US/skills/devops/multica-artifact-cicd-sync/SKILL.md`](./templates/en_US/skills/devops/multica-artifact-cicd-sync/SKILL.md) | DevOps (triggers CI/CD deploy) |
-| `multica-platform-jenkins` | [`templates/en_US/skills/platform/multica-platform-jenkins/SKILL.md`](./templates/en_US/skills/platform/multica-platform-jenkins/SKILL.md) | platform-layer shell (CI/CD system) |
-| `multica-platform-jira` | [`templates/en_US/skills/platform/multica-platform-jira/SKILL.md`](./templates/en_US/skills/platform/multica-platform-jira/SKILL.md) | platform-layer shell (Issue system) |
-| `multica-platform-confluence` | [`templates/en_US/skills/platform/multica-platform-confluence/SKILL.md`](./templates/en_US/skills/platform/multica-platform-confluence/SKILL.md) | platform-layer shell (knowledge base / Wiki) |
+| `multica-verification` (gatekeeping, required) | [`templates/skills/leader/multica-verification/SKILL.md`](./templates/skills/leader/multica-verification/SKILL.md) | **Leader** |
+| `multica-pm-requirement-spec` | [`templates/skills/product-manager/multica-pm-requirement-spec/SKILL.md`](./templates/skills/product-manager/multica-pm-requirement-spec/SKILL.md) | Leader / Architect |
+| `multica-technical-design` | [`templates/skills/architect/multica-technical-design/SKILL.md`](./templates/skills/architect/multica-technical-design/SKILL.md) | Architect |
+| `multica-pm-artifact-publish` | [`templates/skills/product-manager/multica-pm-artifact-publish/SKILL.md`](./templates/skills/product-manager/multica-pm-artifact-publish/SKILL.md) | ProductManager (lands artifacts to the requirement platform) |
+| `multica-design-ui-impl` | [`templates/skills/designer/multica-design-ui-impl/SKILL.md`](./templates/skills/designer/multica-design-ui-impl/SKILL.md) | Designer (lands artifacts to the design platform) |
+| `multica-artifact-architect` | [`templates/skills/architect/multica-artifact-architect/SKILL.md`](./templates/skills/architect/multica-artifact-architect/SKILL.md) | Architect (lands artifacts to Git / knowledge platform) |
+| `multica-artifact-backend` | [`templates/skills/backend/multica-artifact-backend/SKILL.md`](./templates/skills/backend/multica-artifact-backend/SKILL.md) | BackendDev (lands artifacts to the API platform) |
+| `multica-artifact-cicd-sync` | [`templates/skills/devops/multica-artifact-cicd-sync/SKILL.md`](./templates/skills/devops/multica-artifact-cicd-sync/SKILL.md) | DevOps (triggers CI/CD deploy) |
+| `multica-platform-jenkins` | [`templates/skills/platform/multica-platform-jenkins/SKILL.md`](./templates/skills/platform/multica-platform-jenkins/SKILL.md) | platform-layer shell (CI/CD system) |
+| `multica-platform-github-actions` | [`templates/skills/platform/multica-platform-github-actions/SKILL.md`](./templates/skills/platform/multica-platform-github-actions/SKILL.md) | platform-layer shell (GitHub Actions) |
 
-> The 13 Skills above are shared under `templates/en_US/skills/` with the unified `multica-` prefix, in three classes: **gatekeeping/design** (multica-verification / multica-artifact-cicd-sync / multica-pm-requirement-spec / multica-technical-design); **artifact-orchestration** (`multica-artifact-architect` / `multica-artifact-backend` / `multica-artifact-frontend` / `multica-artifact-cicd-sync` + `multica-pm-artifact-publish` + `multica-design-ui-impl` + `multica-test-orchestration`, landing artifacts to team platforms — the platform is implemented inside the skill and is swappable); **platform-layer shell** (multica-platform-* three, the only place allowed to hold company-internal URL/credential *placeholders* — the public repo ships placeholder shells only). The expanded 29-skill set (incl. test/impl/platform additions and the `multica-review-*` set) lives in `templates/zh_CN/skills/` — see `skills/README.md`. Role prompts only say "which skill to use", never a platform name; switch companies by filling the platform shell. See `docs/en_US/role-skills-architecture.md` for the four-layer model. Skills mount **by name**.
+> All skills live under `templates/skills/` with the unified `multica-` prefix, in four layers: **content** (multica-pm-requirement-spec / multica-technical-design / multica-backend-impl / multica-frontend-impl / multica-test-t1-design and -t2 / -t3); **orchestration** (`multica-artifact-*` + `multica-test-orchestration`, landing artifacts to team platforms — platform is swappable); **platform-layer shell** (multica-platform-*, the only place allowed to hold company-internal URL/credential placeholders — all optional); **review** (`multica-review-*` + `multica-verification`). Role prompts only say "which skill to use", never a platform name. See `docs/en_US/role-skills-architecture.md` for the four-layer model. Skills mount **by name**.
 
 #### Step 3 — Create the Squad
 
-Create a Squad and copy `templates/en_US/squad/software-development-reviewed/squad.md` into the Squad Instructions (for the lightweight alternative use `software-development/squad.md`).
+Create a Squad and copy `templates/squad/software-development-reviewed/squad.md` into the Squad Instructions (for the lightweight alternative use `software-development/squad.md`).
 
 ### Step 4 — Create the Issue
 
-Copy `templates/en_US/squad/software-development-reviewed/issue.md` into a new Issue: if requirements already live in Jira/Tapd, pick "External link" and fill only the link + affected ends; otherwise pick "Fully self-contained" and fill everything.
+Copy `templates/squad/software-development-reviewed/issue.md` into a new Issue: if requirements already live in Jira/Tapd, pick "External link" and fill only the link + affected ends; otherwise pick "Fully self-contained" and fill everything.
 
 ### Step 5 — Assign
 

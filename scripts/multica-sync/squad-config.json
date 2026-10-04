@@ -1,0 +1,102 @@
+{
+  "squads": [
+    {
+      "name": "software-development",
+      "description": "This Squad turns an Issue into an accepted, shippable deliverable.",
+      "members": [
+        {
+          "agent_name": "Mika",
+          "role": "Leader"
+        },
+        {
+          "agent_name": "FrontendDev",
+          "role": "FrontendDev"
+        },
+        {
+          "agent_name": "Architect",
+          "role": "Architect"
+        },
+        {
+          "agent_name": "Designer",
+          "role": "Designer"
+        },
+        {
+          "agent_name": "ProductManager",
+          "role": "ProductManager"
+        },
+        {
+          "agent_name": "Tester",
+          "role": "Tester"
+        },
+        {
+          "agent_name": "DevOps",
+          "role": "DevOps"
+        },
+        {
+          "agent_name": "BackendDev",
+          "role": "BackendDev"
+        }
+      ]
+    },
+    {
+      "name": "bug-fix",
+      "description": "Minimal fix combination for bug resolution.",
+      "members": [
+        {
+          "agent_name": "Mika",
+          "role": "Leader"
+        },
+        {
+          "agent_name": "FrontendDev",
+          "role": "FrontendDev"
+        },
+        {
+          "agent_name": "Reviewer",
+          "role": "Reviewer"
+        },
+         {
+          "agent_name": "BackendDev",
+          "role": "BackendDev"
+        },
+        {
+          "agent_name": "Tester",
+          "role": "Tester"
+        }
+      ]
+    },
+    {
+      "name": "software-development-reviewed",
+      "description": "Same pipeline as software-development with dedicated Reviewers.",
+      "members": [
+        {
+          "agent_name": "Mika",
+          "role": "Leader"
+        },
+        {
+          "agent_name": "ArchReviewer",
+          "role": "ArchReviewer"
+        },
+        {
+          "agent_name": "BackendReviewer",
+          "role": "BackendReviewer"
+        },
+        {
+          "agent_name": "FrontendReviewer",
+          "role": "FrontendReviewer"
+        },
+        {
+          "agent_name": "DesignReviewer",
+          "role": "DesignReviewer"
+        },
+        {
+          "agent_name": "ProductReviewer",
+          "role": "ProductReviewer"
+        },
+        {
+          "agent_name": "TestReviewer",
+          "role": "TestReviewer"
+        }
+      ]
+    }
+  ]
+}

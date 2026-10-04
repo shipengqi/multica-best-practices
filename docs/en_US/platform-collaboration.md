@@ -20,10 +20,10 @@ team platform API         tracker / wiki / API platform / design tool / CI …
 
 | Platform skill | Read | Write |
 | --- | --- | --- |
-| `multica-platform-jira` | get-issue, get-wiki-url, resolve-parent-page-id | create-story, transition, append-description, append-artifact-link |
-| `multica-platform-confluence` | `fetch_page.py`, `fetch_page_by_url.py` | `publish_design.py`, PRD HTML |
-| `multica-platform-figma` | `fetch_file.py` | — |
-| `multica-platform-apifox` | scenarios / contract queries | `sync_openapi.js`, scenario supplement, `run_apifox.py` |
+| `issue-tracker-platform | get-issue, get-wiki-url, resolve-parent-page-id | create-story, transition, append-description, append-artifact-link |
+| `wiki-platform | `fetch_page.py`, `fetch_page_by_url.py` | `publish_design.py`, PRD HTML |
+| `` | `fetch_file.py` | — |
+| `` | scenarios / contract queries | `sync_openapi.js`, scenario supplement, `run_apifox.py` |
 | `multica-platform-jenkins` | status / logs | `trigger_env.py` |
 
 ## 3. Role / phase skill → platform (standard matrix)
@@ -44,9 +44,9 @@ team platform API         tracker / wiki / API platform / design tool / CI …
 
 | Capability | Implementation |
 | --- | --- |
-| Read an Issue, parse wiki / design links | `multica-platform-jira` → `get_issue.py` / `jira_cli.py get-issue` |
-| Read wiki prose (URL, images, child pages) | `multica-platform-confluence` → `fetch_page_by_url.py` |
-| Read design files | `multica-platform-figma` → `fetch_file.py` |
+| Read an Issue, parse wiki / design links | `issue-tracker-platform → `get_issue.py` / `jira_cli.py get-issue` |
+| Read wiki prose (URL, images, child pages) | `wiki-platform → `fetch_page_by_url.py` |
+| Read design files | `` → `fetch_file.py` |
 | Orchestration entry point | `multica-test-t1-design` → `fetch_all.py` (locates the platform scripts by skill name) |
 
 **Do not** merge case JSON templates and coverage checklists into the platform layer — those stay in `multica-test-t1-design/references/`.
@@ -62,8 +62,8 @@ Any skill with a non-empty `metadata.orchestrates` adds:
 
 | Platform skill | How this skill uses it |
 | --- | --- |
-| `multica-platform-jira` | … |
-| `multica-platform-confluence` | … |
+| `issue-tracker-platform | … |
+| `wiki-platform | … |
 
 Credentials and CLI details live **only in the platform skill** — this skill does not duplicate them.
 ```
@@ -74,7 +74,7 @@ A content skill (e.g. `multica-backend-impl`) that only reads upstream **indirec
 
 Bad: "Write the tracker Basic-auth steps again inside `multica-test-t1-design`."
 
-Better: "Read `multica-platform-jira/SKILL.md`; T1 only describes the `fetch_all` order."
+Better: "Read `issue-tracker-platform T1 only describes the `fetch_all` order."
 
 Bad: "Architect and Tester each maintain their own wiki fetch."
 

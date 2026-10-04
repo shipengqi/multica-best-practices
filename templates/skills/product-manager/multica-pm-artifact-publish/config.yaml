@@ -1,0 +1,23 @@
+# multica-pm-artifact-publish — PRD orchestration defaults
+# Confluence / JIRA main config lives in platform skills:
+#   multica-platform-confluence/config.yaml
+#   multica-platform-jira/config.yaml
+# Credentials: .env or JIRA_USERNAME / JIRA_PASSWORD env vars
+version: "1.0"
+
+# ── Confluence config (fill in with your company's values)
+confluence:
+  url: "https://your-domain.atlassian.net/wiki"
+  default_space: "PROJ"
+  default_parent_page_id: ""    # page ID under which PRDs are created
+
+# ── JIRA config
+jira:
+  url: "https://your-domain.atlassian.net"
+  issue_type_id: "10001"        # Story
+
+# ── Projects: per-project overrides (optional)
+# projects:
+#   PROJ:
+#     space: "PROJ"
+#     parent_page_id: "12345"

@@ -10,7 +10,7 @@
 
 **不能自动识别。** Multica 不会扫描 GitLab 组织或 JIRA 字段推断涉及哪些仓库。
 
-**唯一事实来源**：Issue 模板中的 **仓库矩阵**（见 `templates/zh_CN/squad/*/issue.md` § Git 分支）。Leader G0 据此派活；DevOps 按矩阵逐仓触发 Jenkins。
+**唯一事实来源**：Issue 模板中的 **仓库矩阵**（见 `templates/squad/*/issue.md` § Git 分支）。Leader G0 据此派活；DevOps 按矩阵逐仓触发 Jenkins。
 
 ### 1.2 Issue 中应写什么
 
@@ -52,7 +52,7 @@
 
 ### 2.1 平台能否读到？
 
-`multica-platform-jira` 的 `get_issue.py` / `jira_cli.py get-issue` 输出含 **`linked_issues`** 数组（link 类型、方向、key、summary、status）。
+`issue-tracker-platform 的 `get_issue.py` / `jira_cli.py get-issue` 输出含 **`linked_issues`** 数组（link 类型、方向、key、summary、status）。
 
 可选 **`--with-linked`**：对每个关联 Issue 再拉一层描述与 Confluence/Figma 链接（用于「本需求是上一需求的迭代」）。
 
@@ -83,15 +83,15 @@
 
 ```bash
 # 当前 Issue + 关联列表
-python multica-platform-jira/scripts/get_issue.py \
+python issue-tracker-platform \
   --url "https://jira.../browse/PROJ-200" -o data/jira.json
 
 # 含关联 Issue 描述与链接（一层）
-python multica-platform-jira/scripts/get_issue.py \
+python issue-tracker-platform \
   --url "https://jira.../browse/PROJ-200" --with-linked -o data/jira-full.json
 
 # 读关联 PRD
-python multica-platform-confluence/scripts/fetch_page_by_url.py \
+python wiki-platform \
   --url "<来自 linked issue 的 Confluence URL>"
 ```
 
@@ -103,7 +103,7 @@ python multica-platform-confluence/scripts/fetch_page_by_url.py \
 开工前：get-issue 当前 KEY；若有 linked_issues，按 Leader/Issue 备注读取关联 JIRA + 其 Confluence 链接正文；冲突以当前 Issue + 最新修订记录为准。
 ```
 
-详见 `multica-platform-jira/references/upstream-read.md`。
+详见 `issue-tracker-platform
 
 ---
 

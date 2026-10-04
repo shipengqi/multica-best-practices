@@ -36,6 +36,6 @@
 
 ## Starter 风格 / Starter style
 
-- `templates/zh_CN/squad/software-development` 是本仓库的 MVP，改动需保持「复制即用」/ it is the repo MVP; changes must keep it copy-paste-run.
+- `templates/squad/software-development` 是本仓库的 MVP，改动需保持「复制即用」/ it is the repo MVP; changes must keep it copy-paste-run.
 - 每个模板旁应尽量附「为什么有效」和「常见失败」/ ship "why it works" and "common failure modes" next to each template.
 - 新增 Starter 前，先在真实任务上验证，再提交（参考 README 的贡献标准：问题 / 场景 / 完整模板 / 真实示例 / 已知失败案例）/ validate new starters on real tasks before submitting (see the README contribution bar: problem / scenarios / complete template / real example / known failure cases).

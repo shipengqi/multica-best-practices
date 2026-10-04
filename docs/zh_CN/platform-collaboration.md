@@ -20,10 +20,10 @@ platform skill          怎么读 / 怎么写 JIRA、Confluence、Apifox、Figma
 
 | Platform skill | 读 | 写 |
 | --- | --- | --- |
-| `multica-platform-jira` | get-issue、get-confluence-url、resolve-parent-page-id | create-story、transition、append-description、append-artifact-link |
-| `multica-platform-confluence` | fetch_page.py、fetch_page_by_url.py | publish_design.py、PRD HTML |
-| `multica-platform-figma` | fetch_file.py | — |
-| `multica-platform-apifox` | 场景 / 契约查询 | sync_openapi.js、场景补充、run_apifox.py |
+| `issue-tracker-platform | get-issue、get-confluence-url、resolve-parent-page-id | create-story、transition、append-description、append-artifact-link |
+| `wiki-platform | fetch_page.py、fetch_page_by_url.py | publish_design.py、PRD HTML |
+| `` | fetch_file.py | — |
+| `` | 场景 / 契约查询 | sync_openapi.js、场景补充、run_apifox.py |
 | `multica-platform-jenkins` | 状态 / 日志 | trigger_env.py |
 
 ## 3. 角色 / 阶段 skill → 平台（标准矩阵）
@@ -44,9 +44,9 @@ platform skill          怎么读 / 怎么写 JIRA、Confluence、Apifox、Figma
 
 | 能力 | 实现 |
 | --- | --- |
-| 读 Issue、解析 Confluence/Figma 链接 | `multica-platform-jira` → `get_issue.py` / `jira_cli.py get-issue` |
-| 读 Confluence 正文（URL、图片、子页） | `multica-platform-confluence` → `fetch_page_by_url.py` |
-| 读 Figma | `multica-platform-figma` → `fetch_file.py` |
+| 读 Issue、解析 Confluence/Figma 链接 | `issue-tracker-platform → `get_issue.py` / `jira_cli.py get-issue` |
+| 读 Confluence 正文（URL、图片、子页） | `wiki-platform → `fetch_page_by_url.py` |
+| 读 Figma | `` → `fetch_file.py` |
 | 编排入口 | `multica-test-t1-design` → `fetch_all.py`（按 skill 名定位 platform 脚本） |
 
 **不要**把用例 JSON 模板、覆盖清单并进 platform——那些留在 `multica-test-t1-design/references/`。
@@ -62,8 +62,8 @@ platform skill          怎么读 / 怎么写 JIRA、Confluence、Apifox、Figma
 
 | Platform skill | 本 skill 用途 |
 | --- | --- |
-| `multica-platform-jira` | … |
-| `multica-platform-confluence` | … |
+| `issue-tracker-platform | … |
+| `wiki-platform | … |
 
 凭据与 CLI 细节**只查 platform skill**，本 skill 不重复维护。
 ```
@@ -74,7 +74,7 @@ platform skill          怎么读 / 怎么写 JIRA、Confluence、Apifox、Figma
 
 Bad: "在 test-t1-design 里再写一遍 JIRA Basic 认证步骤。"
 
-Better: "Read `multica-platform-jira/SKILL.md`；T1 只写 fetch_all 的编排顺序。"
+Better: "Read `issue-tracker-platform 只写 fetch_all 的编排顺序。"
 
 Bad: "Architect 和 Tester 各写一套 fetch Confluence。"
 

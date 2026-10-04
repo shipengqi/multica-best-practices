@@ -3,7 +3,93 @@
 All notable changes to this project will be documented in this file.
 本文件记录本项目的所有重要变更。新条目采用中英结合写法（Chinese-first, English alongside）。
 
-## v0.0.17 - 2026-09-10 · 命名对齐内网 + 删除 gate-setup + 公开 knowledge-base / Rename to internal names, drop gate-setup, publish knowledge-base
+## v0.0.22 - 2026-10-03 · 统一 CLI 入口 multica.py / Unified CLI: multica.py
+
+### Added / 新增
+
+- **scripts/multica-sync/multica.py**: 新建统一 CLI 入口，四个子命令替代五个独立脚本：
+  - `init`: 一键建队（原 `bootstrap_squad.py`）
+  - `sync`: 增量同步 skill/agent/squad 内容（原 `sync_skills.py` + `sync_agents.py` 合并）
+  - `clone`: 跨 workspace 复制小队（原 `clone_squad.py`）
+  - `list`: 只读查看小队 agent 及 skill 绑定（原 `list_squad_skills.py`）
+
+- **multica.py `sync` 子命令新增 `--prune` 标志**:
+  - 显式传递才删除工作区中模板已不存在的技能
+  - 默认保留（安全默认值，避免意外删除用户自定义资源）
+  - 与 `--dry-run` 配合可先预览待删除列表
+
+- **multica_client.py**: 新增 `delete_skill(workspace, skill_id)` 方法，支持 `--prune` 操作。
+
+### Removed / 删除
+
+- `bootstrap_squad.py`、`sync_agents.py`、`sync_skills.py`、`clone_squad.py`、`list_squad_skills.py`：
+  功能完全迁移到 `multica.py`，保留五个库模块 (`multica_client.py`、`repo_paths.py`、`squad_mapping.py`)。
+
+### Changed / 变更
+
+- **scripts/multica-sync/README.md**: 完全重写，四个子命令各占一节，统一 Bash/Zsh 和 PowerShell 示例。
+- **README.md / README.en.md**: Mode A 命令从 `python bootstrap_squad.py` 改为 `python multica.py init`。
+
+---
+
+## v0.0.21 - 2026-10-03 · 修复"Copy. Paste. Run."入门路径 / Fix "Copy. Paste. Run." onboarding bugs
+
+### Fixed / 修复
+
+- **squad-bootstrap.example.json**: 
+  - 删除 Leader 技能列表中已不存在的 `multica-manage-skills`（见 v0.0.20 删除记录），避免 bootstrap 脚本静默跳过该条目。
+  - 改 `instructions_file` 从 `squad/software-development/squad.md` 为 `squad/software-development-reviewed/squad.md`，使启动配置与 15 agent 定义相匹配（否则 6 个 Reviewer agent 创建后无人调用）。
+
+- **scripts/multica-sync/multica_client.py**:
+  - 新增 `get_skill(workspace, skill_id)` 方法：获取单个技能完整内容（用于 `clone_squad.py`）。
+  - 新增 `update_squad_member_role(workspace, squad_id, agent_id, role)` 方法：修改已存在成员的角色（用于 `clone_squad.py` 的角色纠正）。
+  - 修复 `clone_squad.py` 运行时 `AttributeError`。
+
+- **README.md / README.en.md**:
+  - 修正技能数量：29 → 24（删除的 `multica-manage-skills` + `shared/` 组已不存在）。
+  - 删除已不存在的 `templates/en_US/` 目录引用（实际结构为 `templates/agents/` 等，无语言子目录）。
+  - 新增 Bash/Zsh 环境变量导出示例（之前仅 PowerShell），支持 macOS/Linux 用户直接复制粘贴。
+  - Step 1 表格改为：核心 9 个角色（所有 Starter 都有）+ 专属 Reviewer 6 个（仅主流程），避免用户按文档操作得到不完整 squad。
+
+- **templates/squad/software-development/README.md / software-development-reviewed/README.md / bug-fix/README.md**:
+  - 新增"Pre-requisite: MULTICA.md in product repo"说明：若 squad 含 Tester/FrontendDev/BackendDev，需提前复制 `MULTICA.md` 到产品仓库根目录填写，否则这些角色首次派发时进入 BLOCKED 状态。这一步之前从未在快速入门中出现过，导致用户运行失败。
+
+### Changed / 变更
+
+- **scripts/multica-sync/README.md**: 同步新增 Bash/Zsh 语法示例与 workspace ID 获取指引。
+
+---
+
+## v0.0.20 - 2026-10-03 · 删除无用的 shared skill / Remove unused shared skill
+
+
+### Removed / 删除
+
+- `templates/skills/shared/multica-manage-skills/`：功能已被 `scripts/multica-sync/` 覆盖，且不属于 squad 运行时能力，删除整个目录。
+- `docs/zh_CN/role-skills-architecture.md` 和 `docs/en_US/role-skills-architecture.md` 中的"工具 / Tooling"小节：随 skill 一并移除。
+
+## v0.0.19 - 2026-10-03 · 平台渗漏：multica-test-t3-api-automation 改为通用规范 / Platform leakage: multica-test-t3-api-automation becomes tool-agnostic
+
+### Removed / 删除
+
+- `templates/en_US/skills/tester/multica-test-t3-api-automation/.env.example`、`config.yaml`、`scripts/` 目录：内容层技能不应硬编码平台配置（Apifox）。SKILL.md 第 50 行明确说"如果挂载平台技能则用它；否则用团队标准工具"——规范本身是平台无关的。
+
+## v0.0.18 - 2026-10-03 · 删除 zh_CN 模板树、修复平台渗漏 / Drop zh_CN template tree, fix platform leakage
+
+### Changed / 变更
+
+- **删除 `templates/zh_CN/`**（模板迁移至 en_US，English 对 Agent 更友好）：所有内容层 skill（`multica-backend-impl` / `multica-frontend-impl` / `multica-technical-design` 等）、Agent instructions、squad starters 均已迁移至 `templates/en_US/` 并同步修复平台渗漏问题。`docs/zh_CN/`（方法论文档）保留不变。
+- **修复内容层技能的平台渗漏**（"Platform leakage fix"）：`multica-backend-impl`、`multica-frontend-impl`、`multica-technical-design`、`multica-test-t1-design`、`multica-test-t2-coverage` 等内容层 skill 中硬编码的 JIRA / Confluence / Apifox 调用，统一改为「若挂载了 `multica-platform-X`：则使用工具；否则：直接读取 Leader 派发的链接」。平台 skill 是**可选增强**，不是前提。
+- **README 新增「新项目快速判断」Q&A** 表（中英均有）：明确回答"不用 JIRA/Confluence 能不能用"、"最少需要什么"、"T1/T2/T3 是否必须"、"是否要挂全部 29 个 Skill"。
+- **更新 AGENTS.md**：删除 i18n 约定章节、更新项目结构图、修复 docs 链接（`docs/zh_CN/` → `docs/en_US/`）。
+- **新增 `templates/en_US/skills/README.md`**：英文版技能索引（四层模型 + 全部 29 个 skill 列表）。
+- **新增 `templates/en_US/skills/devops/multica-artifact-cicd-sync/config.yaml`** 和 **`templates/en_US/skills/product-manager/multica-pm-artifact-publish/config.yaml`**：英文版占位配置模板。
+
+### Removed / 删除
+
+- `templates/zh_CN/` 全部内容（平台实现脚本、中文 Agent instructions、中文 squad starters）
+
+ · 命名对齐内网 + 删除 gate-setup + 公开 knowledge-base / Rename to internal names, drop gate-setup, publish knowledge-base
 
 ### Changed / 变更
 

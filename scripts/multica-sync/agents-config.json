@@ -1,0 +1,79 @@
+{
+  "agents": [
+    {
+      "name": "Mika",
+      "stem": "leader",
+      "skills": ["multica-verification"]
+    },
+    {
+      "name": "FrontendDev",
+      "stem": "frontend-developer",
+      "skills": ["multica-frontend-impl", "multica-artifact-frontend"]
+    },
+    {
+      "name": "ProductManager",
+      "stem": "product-manager",
+      "skills": ["multica-pm-requirement-spec", "multica-pm-artifact-publish"]
+    },
+    {
+      "name": "Architect",
+      "stem": "architect",
+      "skills": ["multica-technical-design", "multica-artifact-architect", "multica-pm-requirement-spec"]
+    },
+    {
+      "name": "Designer",
+      "stem": "designer",
+      "skills": ["multica-design-ui-impl"]
+    },
+    {
+      "name": "Tester",
+      "stem": "tester",
+      "skills": ["multica-test-t1-design", "multica-test-t2-coverage", "multica-test-t3-ui-automation", "multica-test-orchestration"]
+    },
+    {
+      "name": "DevOps",
+      "stem": "devops",
+      "skills": ["multica-artifact-cicd-sync"]
+    },
+    {
+      "name": "BackendDev",
+      "stem": "backend-developer",
+      "skills": ["multica-backend-impl", "multica-artifact-backend"]
+    },
+    {
+      "name": "ArchReviewer",
+      "stem": "arch-reviewer",
+      "skills": ["multica-review-architect"]
+    },
+    {
+      "name": "BackendReviewer",
+      "stem": "backend-reviewer",
+      "skills": ["multica-review-backend"]
+    },
+    {
+      "name": "DesignReviewer",
+      "stem": "design-reviewer",
+      "skills": ["multica-review-designer"]
+    },
+    {
+      "name": "FrontendReviewer",
+      "stem": "frontend-reviewer",
+      "skills": ["multica-review-frontend"]
+    },
+    {
+      "name": "ProductReviewer",
+      "stem": "product-reviewer",
+      "skills": ["multica-review-product"]
+    },
+    {
+      "name": "TestReviewer",
+      "stem": "test-reviewer",
+      "skills": ["multica-review-test"]
+    },
+    {
+      "name": "Reviewer",
+      "stem": "reviewer",
+      "skills": []
+    }
+  ]
+}

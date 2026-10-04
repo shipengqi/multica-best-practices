@@ -54,7 +54,7 @@
 
 ```text
 你是本仓库（multica-best-practices）的适配助手。
-请把 templates/zh_CN/squad/software-development 这套模板适配到我的技术栈（
+请把 templates/squad/software-development 这套模板适配到我的技术栈（
 [填入语言 / 框架 / 工具链]），要求：
 1. 验证命令替换成我们项目的真实命令（lint / test / build）。
 2. 保留 G0–G4 门禁结构，只改验证方式和示例。
@@ -87,4 +87,4 @@ A：研究类任务的最小组合是「Researcher → Leader 判门（multica-v
 ## 参考
 
 - Multica 官方文档与社区实践链接见 [`README.md`](../../README.md) 底部的「资源」
-- 门禁实现：CI 硬门禁模板随 `multica-artifact-cicd-sync` skill 自包含（[`templates/zh_CN/skills/devops/multica-artifact-cicd-sync/`](../../templates/zh_CN/skills/devops/multica-artifact-cicd-sync/)）
+- 门禁实现：CI 硬门禁模板随 `multica-artifact-cicd-sync` skill 自包含（[`templates/skills/devops/multica-artifact-cicd-sync/`](../../templates/skills/devops/multica-artifact-cicd-sync/)）

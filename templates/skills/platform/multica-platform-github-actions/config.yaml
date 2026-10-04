@@ -1,0 +1,13 @@
+# multica-platform-github-actions — orchestration config (no credentials)
+version: "1.0"
+github:
+  api_url: "https://api.github.com"   # or https://<ghes-host>/api/v3
+  default_ref: main
+issue_service_map:
+  PROJ:
+    dev:
+      - repo: "<owner>/<repo>"
+        workflow: "deploy-dev.yml"
+    sit:
+      - repo: "<owner>/<repo>"
+        workflow: "deploy-sit.yml"

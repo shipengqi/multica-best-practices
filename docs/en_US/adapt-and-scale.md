@@ -54,7 +54,7 @@ If you don't want to hand-edit templates, copy this straight into Multica or any
 
 ```text
 You are the adaptation assistant for this repo (multica-best-practices).
-Adapt the templates/en_US/squad/software-development template set to my tech stack
+Adapt the templates/squad/software-development template set to my tech stack
 ([fill in language / framework / toolchain]). Requirements:
 1. Replace the verification commands with the real commands of our project (lint / test / build).
 2. Keep the G0–G4 gate structure; only change the verification method and examples.
@@ -87,4 +87,4 @@ A: The smallest combination for research tasks is "Researcher → Leader gates (
 ## References
 
 - Multica official docs and community practice links: see the "Resources" section at the bottom of [`README.md`](../../README.md)
-- Gate implementation: CI hard-gate templates ship inside the `multica-artifact-cicd-sync` skill ([`templates/en_US/skills/devops/multica-artifact-cicd-sync/`](../../templates/en_US/skills/devops/multica-artifact-cicd-sync/))
+- Gate implementation: CI hard-gate templates ship inside the `multica-artifact-cicd-sync` skill ([`templates/skills/devops/multica-artifact-cicd-sync/`](../../templates/skills/devops/multica-artifact-cicd-sync/))

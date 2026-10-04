@@ -10,7 +10,7 @@ This page covers two things: how **multi-repo requirements** are identified and 
 
 **No.** Multica does not scan your Git organisation or your tracker fields to infer which repos are involved.
 
-**Single source of truth**: the **repo matrix** in the Issue template (see `templates/en_US/squad/*/issue.md`). The Leader dispatches work from it at G0; DevOps triggers CI per repo from it.
+**Single source of truth**: the **repo matrix** in the Issue template (see `templates/squad/*/issue.md`). The Leader dispatches work from it at G0; DevOps triggers CI per repo from it.
 
 ### 1.2 What the Issue must state
 
@@ -52,7 +52,7 @@ Example:
 
 ### 2.1 Can the platform read them?
 
-`multica-platform-jira` (`get_issue.py` / `jira_cli.py get-issue`) returns a **`linked_issues`** array (link type, direction, key, summary, status).
+`issue-tracker-platform (`get_issue.py` / `jira_cli.py get-issue`) returns a **`linked_issues`** array (link type, direction, key, summary, status).
 
 Optional **`--with-linked`**: pull one more level — the description and tracker/design links of each linked Issue (useful when this requirement iterates on a previous one).
 
@@ -83,15 +83,15 @@ Optional **`--with-linked`**: pull one more level — the description and tracke
 
 ```bash
 # Current Issue + link list
-python multica-platform-jira/scripts/get_issue.py \
+python issue-tracker-platform \
   --url "https://jira.../browse/PROJ-200" -o data/jira.json
 
 # Include linked Issues' descriptions and links (one level)
-python multica-platform-jira/scripts/get_issue.py \
+python issue-tracker-platform \
   --url "https://jira.../browse/PROJ-200" --with-linked -o data/jira-full.json
 
 # Read a linked PRD
-python multica-platform-confluence/scripts/fetch_page_by_url.py \
+python wiki-platform \
   --url "<Confluence URL from the linked issue>"
 ```
 
@@ -105,7 +105,7 @@ issues and their design page bodies as directed by the Leader / Issue notes.
 On conflict, the current Issue plus the latest revision record wins.
 ```
 
-Details: `multica-platform-jira` → `references/upstream-read.md`.
+Details: `issue-tracker-platform → `references/upstream-read.md`.
 
 ---
 

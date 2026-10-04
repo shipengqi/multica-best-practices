@@ -3,7 +3,7 @@
 > This page answers one question: **should a capability be a Skill, part of Agent Instructions, or part of the Squad?**
 > And why platform URLs, credentials, and REST details **never appear in a role prompt**.
 
-It is the full argument behind the "three-layer model" in [artifact-conventions](./artifact-conventions.md), and the design rationale for the index in `templates/en_US/skills/README.md`.
+It is the full argument behind the "three-layer model" in [artifact-conventions](./artifact-conventions.md), and the design rationale for the index in `templates/skills/README.md`.
 
 ---
 
@@ -42,8 +42,8 @@ Layering follows one principle: **things that change at different rates do not b
 └────────────────────────┬───────────────────────────────────────────────┘
                          │ called by skill name
 ┌─ platform ─────────────┴── the only layer that touches external systems ┐
-│  multica-platform-confluence / -jira / -jenkins                        │
-│  multica-platform-apifox / -figma                                      │
+│  wiki-platform / -jira / -jenkins                        │
+│   / -figma                                      │
 │  URLs, credentials and REST details live here and nowhere else         │
 └────────────────────────────────────────────────────────────────────────┘
 
@@ -96,12 +96,12 @@ Layering follows one principle: **things that change at different rates do not b
 
 | Skill | Read | Write |
 | --- | --- | --- |
-| `multica-platform-jira` | issues, linked issues, wiki links | create story, transition, append description / link |
-| `multica-platform-confluence` | pages (URL / pageId → Markdown + images) | create / update pages (Markdown / HTML) |
-| `multica-platform-figma` | file metadata, design summary | — |
-| `multica-platform-apifox` | scenarios / contract | OpenAPI sync, scenario supplement, batch run |
+| `issue-tracker-platform | issues, linked issues, wiki links | create story, transition, append description / link |
+| `wiki-platform | pages (URL / pageId → Markdown + images) | create / update pages (Markdown / HTML) |
+| `` | file metadata, design summary | — |
+| `` | scenarios / contract | OpenAPI sync, scenario supplement, batch run |
 | `multica-platform-jenkins` | build status, logs | trigger build / release / promote |
-| `multica-platform-knowledge-base` | knowledge-base Q&A | — |
+| `knowledge-base-platform | knowledge-base Q&A | — |
 
 > Platform skills are **placeholder shells only**: `config.yaml` and `.env.example` contain nothing but `<JIRA_URL>`, `<JENKINS_URL>` and friends. Teams fill in their own values. See [platform-collaboration](./platform-collaboration.md).
 
@@ -115,12 +115,6 @@ Layering follows one principle: **things that change at different rates do not b
 | `multica-review-frontend` | FrontendReviewer | edge states, blast radius, 8 dimensions |
 | `multica-review-backend` | BackendReviewer | contract, error handling, compatibility |
 | `multica-review-test` | TestReviewer | case executability and coverage honesty |
-
-### Tooling
-
-| Skill | Purpose |
-| --- | --- |
-| `multica-manage-skills` | Operational statistics through the Multica API |
 
 ---
 
@@ -156,7 +150,7 @@ Layering follows one principle: **things that change at different rates do not b
 | Bad | Better |
 | --- | --- |
 | "Publish the design doc under page X of space Y" in Agent Instructions | "Land it with `multica-artifact-architect` and return the link" — parent-page config stays in the platform skill |
-| A role skill carrying its own tracker Basic-auth code | Delete it; declare `metadata.orchestrates: multica-platform-jira` instead |
+| A role skill carrying its own tracker Basic-auth code | Delete it; declare `metadata.orchestrates: issue-tracker-platform instead |
 | Letting the producer review its own output | Review runs through `multica-review-*` + a non-producer — see [gates-and-evidence](./gates-and-evidence.md) |
 | One skill that both defines "how to write a case" and "how to connect to the tracker and import" | Split it: content stays in T1, connection stays in the platform; tool-specific import scripts live in your own T1 |
 
