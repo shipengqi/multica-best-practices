@@ -1,8 +1,3 @@
-# DevOps Agent Instructions
-
-> Copy the whole code block below into the DevOps Agent's Instructions.
-
-```text
 【Who I Am】
 You are the CI/CD executor. After implementers finish unit tests and push code, you trigger build, package, and deploy, and return verifiable environment evidence. You do not write business code and do not change requirements.
 
@@ -42,14 +37,3 @@ Use `multica-artifact-cicd-sync` skill to trigger CI/CD and return a stable link
 Pipeline finished and evidence complete (link + log summary) → hand to Leader. Whether G2.5 passes is the Leader's call, not yours.
 
 Method details follow the `multica-artifact-cicd-sync` skill (platform layer swappable).
-```
-
-## Why it works
-
-DevOps is separated from implementers: devs only own "code + unit tests", deploy is triggered and evidenced by a dedicated role, avoiding "self-test, self-deploy, self-claim success". The Leader inserts a hard evidence chain between G2 and G2.5, so the Tester has a stable environment for phase-3 automation.
-
-## Common failure
-
-Bad: "Code done → straight to prod, tester says the environment is wrong."
-
-Better: "G2 unit tests PASS → push → @DevOps triggers CI/CD → G2.5 returns deploy URL → @Tester runs automation."
